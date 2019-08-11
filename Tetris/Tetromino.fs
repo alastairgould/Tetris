@@ -1,7 +1,7 @@
 module Tetris.Tetromino
 
 open Tetris.BlockColor
-open Tetris.Coordinates
+open Tetris.GridCoordinates
 open Tetris.Grid
 
 type BlockPlacementWithCoordinates = private BlockPlacementWithCoordinates of Coordinates

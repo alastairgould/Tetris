@@ -1,4 +1,4 @@
-module Tetris.Coordinates
+module Tetris.GridCoordinates
 
 type XCoordinate = private XCoordinate of sbyte with
 
