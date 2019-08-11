@@ -6,8 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Color.fs" />
+        <Compile Include="BlockColor.fs" />
         <Compile Include="Coordinates.fs" />
+        <Compile Include="Grid.fs" />
         <Compile Include="Tetromino.fs" />
         <Compile Include="GameModel.fs" />
         <Compile Include="Renderer.fs" />

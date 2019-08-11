@@ -1,15 +1,8 @@
 module Tetris.GameModel
 
-open Tetris.Coordinates
-open Tetris.Color
+open Tetris.Grid
 open Tetris.Tetromino
 
-type TetrisGridCell =
-    | CellWithBlock of Color
-    | CellWithoutBlock
-
-type TetrisGrid = TetrisGrid of (TetrisGridCell list) list
-        
 type GameModel = private {
     Tetromino: TetrominoWithPosition
     Grid: TetrisGrid
@@ -23,46 +16,6 @@ type InputToGameModel =
     | MoveLeft
     | MoveRight
 
-let private getBlockPlacementsForTetromino tetromino =
-    let cords (BlockPlacementsForShape cords) = cords
-    (tetromino |> getColoredShapeFromTetromino).Shape |> cords
-
-let private translateBlockPlacement blockPlacement tetrominoPosition =
-    blockPlacement + tetrominoPosition 
-    
-let private translateBlocks (tetrominoWithPosition: TetrominoWithPosition) =
-    let blockPlacements = tetrominoWithPosition.Tetromino |> getBlockPlacementsForTetromino
-    let position = tetrominoWithPosition.Position
-    blockPlacements |> List.map (fun blockPlacement -> translateBlockPlacement blockPlacement position)
-    
-let private getColorOfTetromino tetromino =
-    (tetromino |> getColoredShapeFromTetromino).Color
-    
-let private placeTetrisBlock tetromino coordinates =
-    let translatedBlocks = translateBlocks tetromino
-    let getCoordinatesFromBlockPlacement (BlockPlacementWithCoordinates coordinates) = coordinates
-    let translatedCords = translatedBlocks |> List.map (getCoordinatesFromBlockPlacement)
-    let containsBlock = translatedCords |> List.contains coordinates
-    let color = getColorOfTetromino tetromino.Tetromino
-    
-    match containsBlock with
-        | true -> CellWithBlock color
-        | false -> CellWithoutBlock
-    
-let private addTetrominoToGrid tetrisGrid tetromino =
-    let getGridArray (TetrisGrid grid) = grid
-    let generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
-   
-    let grid = getGridArray tetrisGrid
-    let xIndexedGrid = grid |> List.map (fun row -> row |> List.zip (generateIndices row.Length))
-    let yIndexedGrid = xIndexedGrid |> List.zip (generateIndices grid.Length) 
-    
-    let gridWithTetromino = yIndexedGrid |> List.map (fun row -> (snd row) |> List.map (fun cell ->
-        let coordinates = createCoordinates (fst cell) (fst row)
-        placeTetrisBlock tetromino coordinates)) 
-    
-    TetrisGrid gridWithTetromino
-    
 let getGameModelFromStepState stepState =
     match stepState with
         | ReactedToInput state -> state

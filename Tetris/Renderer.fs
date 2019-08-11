@@ -1,7 +1,7 @@
 module Tetris.Renderer
 
-open Tetris.Color
-open Tetris.GameModel
+open Tetris.BlockColor
+open Tetris.Grid
 open SFML.Graphics
 open SFML.System
 
@@ -29,10 +29,10 @@ type private RenderableBlock = {
     ySize: int32
     xPos: int32
     yPos: int32
-    Color: Tetris.Color.Color option
+    Color: Tetris.BlockColor.BlockColor option
 }
 
-let private convertFromColorToSfmlColor (color: Tetris.Color.Color) =
+let private convertFromColorToSfmlColor (color: Tetris.BlockColor.BlockColor) =
     match color with
     | LightBlue -> SFML.Graphics.Color.Cyan
     | DarkBlue -> SFML.Graphics.Color.Blue
@@ -42,7 +42,7 @@ let private convertFromColorToSfmlColor (color: Tetris.Color.Color) =
     | Purple -> SFML.Graphics.Color.Red
     | Red -> SFML.Graphics.Color.Red
 
-let private convertFromOptionColorToSfmlColor (color: Tetris.Color.Color option) = 
+let private convertFromOptionColorToSfmlColor (color: Tetris.BlockColor.BlockColor option) = 
     match color with
     | Some color ->  convertFromColorToSfmlColor color
     | None -> SFML.Graphics.Color(240uy, 240uy, 240uy)
