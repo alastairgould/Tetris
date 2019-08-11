@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Color.fs" />
+        <Compile Include="Coordinates.fs" />
+        <Compile Include="Tetromino.fs" />
+        <Compile Include="GameModel.fs" />
+        <Compile Include="Renderer.fs" />
+        <Compile Include="Input.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SFML.Net" Version="2.5.0" />
+    </ItemGroup>
+
+</Project>
