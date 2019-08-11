@@ -16,7 +16,7 @@ type InputToGameModel =
     | MoveLeft
     | MoveRight
 
-let getGameModelFromStepState stepState =
+let private  getGameModelFromStepState stepState =
     match stepState with
         | ReactedToInput state -> state
         | NotReactedToInput state -> state
