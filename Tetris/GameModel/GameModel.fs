@@ -30,7 +30,7 @@ let createInitialGameModel =
     let grid = TetrisGrid ([for y in 0 .. 19 -> [for x in 0 .. 9-> CellWithoutBlock]])
     NotReactedToInput { Tetromino = tetrominoWithPosition; Grid = grid }
     
-let stepStateBind f stepState =
+let bind f stepState =
     match stepState with
         | ReactedToInput _ -> stepState
         | NotReactedToInput gameModel -> f gameModel
@@ -40,7 +40,7 @@ let reactToInput (stepState: CurrentStepState) (input: InputToGameModel) =
                                     | MoveLeft -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoMovement -1y 0y) }
                                     | MoveRight -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoMovement 1y 0y) }
     
-    stepStateBind handleInput stepState
+    bind handleInput stepState
     
 let stepWorld (stepState: CurrentStepState) =
     let gameModel = stepState |> getGameModelFromStepState
