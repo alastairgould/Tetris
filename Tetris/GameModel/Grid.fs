@@ -1,6 +1,6 @@
-module Tetris.Grid
+module Tetris.GameModel.Grid
 
-open Tetris.BlockColor
+open Tetris.GameModel.BlockColor
 
 type TetrisGridCell =
     | CellWithBlock of BlockColor

@@ -1,9 +1,8 @@
 ﻿open System.Diagnostics
 
-open Tetris
-open Tetris.GameModel
-open Tetris.Renderer
 open Tetris.Input
+open Tetris.GameModel.GameModel
+open Tetris.Renderer
 
 let processStep (stopWatch: Stopwatch) gameModel =
     if stopWatch.Elapsed.TotalSeconds > 0.5 then
@@ -14,7 +13,7 @@ let processStep (stopWatch: Stopwatch) gameModel =
         gameModel 
        
 let rec gameLoop renderer stopWatch gameModel =
-    let input = Input.getProgramInput()
+    let input = getProgramInput()
    
     let processStepWithStopwatch = processStep stopWatch
     let renderableGrid = renderableGrid gameModel 

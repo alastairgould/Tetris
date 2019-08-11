@@ -1,8 +1,8 @@
-module Tetris.Tetromino
+module Tetris.GameModel.Tetromino
 
-open Tetris.BlockColor
-open Tetris.GridCoordinates
-open Tetris.Grid
+open Tetris.GameModel.BlockColor
+open Tetris.GameModel.GridCoordinates
+open Tetris.GameModel.Grid
 
 type BlockPlacementWithCoordinates = private BlockPlacementWithCoordinates of Coordinates
 
@@ -83,7 +83,7 @@ let private translateBlocks (tetrominoWithPosition: TetrominoWithPosition) =
 let private getColorOfTetromino tetromino =
     (tetromino |> getColoredShapeFromTetromino).Color
     
-let private placeTetrisBlock tetromino coordinates =
+let private shouldCellContainBlock tetromino coordinates =
     let translatedBlocks = translateBlocks tetromino
     let getCoordinatesFromBlockPlacement (BlockPlacementWithCoordinates coordinates) = coordinates
     let translatedCords = translatedBlocks |> List.map (getCoordinatesFromBlockPlacement)
@@ -110,7 +110,7 @@ let addTetrominoToGrid tetrisGrid tetromino =
     
     let gridWithTetromino = yIndexedGrid |> List.map (fun row -> (snd row) |> List.map (fun cell ->
         let coordinates = createCoordinates (fst cell) (fst row)
-        placeTetrisBlock tetromino coordinates)) 
+        shouldCellContainBlock tetromino coordinates)) 
     
     TetrisGrid gridWithTetromino
     

@@ -1,6 +1,6 @@
 module Tetris.Input
 
-open Tetris.GameModel
+open Tetris.GameModel.GameModel
 open SFML.Window
 
 type Input =

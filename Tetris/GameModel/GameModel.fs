@@ -1,7 +1,7 @@
-module Tetris.GameModel
+module Tetris.GameModel.GameModel
 
-open Tetris.Grid
-open Tetris.Tetromino
+open Tetris.GameModel.Grid
+open Tetris.GameModel.Tetromino
 
 type GameModel = private {
     Tetromino: TetrominoWithPosition
