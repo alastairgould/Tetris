@@ -9,7 +9,6 @@ type MouseDraggingContext = {
     X: int
     Y: int
 } with
-
     static member (-) (first: MouseDraggingContext, second: MouseDraggingContext) =
         { X = first.X - second.X; Y = first.Y - second.Y }
 
@@ -50,7 +49,7 @@ let private convertFromOptionColorToSfmlColor (color: BlockColor option) =
 let private renderGrid (window: RenderWindow) grid =
     let getGridArray (TetrisGrid grid) = grid
 
-    let yCords = [for y in 0 .. ((getGridArray grid).Length) - 1 -> y]
+    let yCords = [for y in 0 .. ((getGridArray grid).Length) - 1 -> y] |> List.rev
     let generateXIndexes size = [for x in 0 .. size -> x]
 
     let xIndexedGrid = (getGridArray grid) |> List.map (fun row -> row |> List.zip (generateXIndexes (row.Length - 1)))
@@ -83,10 +82,10 @@ let private getMouseContext() =
 
 let private moveWindow oldContext newContext (window: RenderWindow) =
     let diff = newContext - oldContext
-    let windowPositon = window.Position
-    window.Position <- windowPositon + Vector2i(diff.X, diff.Y)
+    let windowPosition = window.Position
+    window.Position <- windowPosition + Vector2i(diff.X, diff.Y)
     
-let private performMouseOperatons context =
+let private performMouseOperations context =
     let window = context.RenderWindow
     let isLeftButtonClicked = SFML.Window.Mouse.IsButtonPressed (SFML.Window.Mouse.Button.Left)
     match (isLeftButtonClicked, context.MouseDragging) with
@@ -109,7 +108,7 @@ let render renderer grid =
     
     window.DispatchEvents()
     
-    let mouseDragging = performMouseOperatons context
+    let mouseDragging = performMouseOperations context
         
     window.Clear(Color(250uy, 250uy, 250uy))
     renderGrid window grid

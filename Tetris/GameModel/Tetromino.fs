@@ -48,13 +48,13 @@ let private createBlockPlacementCoordinates x y =
 
 let private createITetromino =
     let color = Orange 
-    let blockPlacements = BlockPlacementsForShape [ for y in 0y .. 3y -> createBlockPlacementCoordinates 0y y ]
+    let blockPlacements = BlockPlacementsForShape [ for x in -2y .. 1y -> createBlockPlacementCoordinates x 0y ]
     let coloredShape = { Shape = blockPlacements; Color = color }
     I coloredShape
 
 let private createOTetromino =
-    let blockPlacements = BlockPlacementsForShape ([for y in 0y .. 1y -> [for x in 0y .. 1y -> createBlockPlacementCoordinates x y]] |> List.concat) 
-    let color = Yellow
+    let blockPlacements = BlockPlacementsForShape ([for y in -1y .. 0y -> [for x in -1y .. 0y -> createBlockPlacementCoordinates x y]] |> List.concat) 
+    let color = Orange
     let coloredShape = { Shape = blockPlacements; Color = color }
     O coloredShape
 
@@ -116,3 +116,16 @@ let addTetrominoToGrid tetrisGrid tetromino =
     
 let createTetromino =
     createITetromino
+    
+let rotateTetrominoRight tetromino =
+    let getBlockPlacementCords (BlockPlacementWithCoordinates cords) = cords
+    let tetrominoBlocks = getBlockPlacementsForTetromino tetromino
+    let coloredShape = getColoredShapeFromTetromino tetromino
+    
+    let newBlockCords = tetrominoBlocks |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)
+                                        |> List.map(fun blockCords -> rotateCoordinatesRight blockCords)
+                                        |> List.map(fun rotatedCords -> BlockPlacementWithCoordinates rotatedCords)
+                                        |> BlockPlacementsForShape
+                                        
+    let newColoredShape = {coloredShape with Shape = newBlockCords}
+    I newColoredShape
