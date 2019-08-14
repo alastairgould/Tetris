@@ -124,7 +124,7 @@ let createZTetromino =
     
     let color = Red
     let coloredShape = { Shape = shape; Color = color }
-    T coloredShape
+    Z coloredShape
 
 let private getColoredShapeFromTetromino tetromino =
     match tetromino with
