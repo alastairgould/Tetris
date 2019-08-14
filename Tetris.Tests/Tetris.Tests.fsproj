@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TetrisExpect.fs" />
+    <Compile Include="TetrominoTestHelpers.fs" />
     <Compile Include="TetrominoTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>

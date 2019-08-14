@@ -58,6 +58,15 @@ let createOTetromino =
     let coloredShape = { Shape = blockPlacements; Color = color }
     O coloredShape
 
+let createJTetromino =
+    let blockPlacements = BlockPlacementsForShape ([for y in 0y .. 1y -> match y with
+                                                                            | y when y = 0y -> [for x in -2y .. 0y -> createBlockPlacementCoordinates x y]
+                                                                            | y when y = 1y -> [createBlockPlacementCoordinates -2y y]
+                                                   ] |> List.concat) 
+    let color = Orange
+    let coloredShape = { Shape = blockPlacements; Color = color }
+    O coloredShape
+
 let private getColoredShapeFromTetromino tetromino =
     match tetromino with
         | I coloredShape -> coloredShape
@@ -116,7 +125,7 @@ let addTetrominoToGrid tetrisGrid tetromino =
     
 let createTetromino =
     createITetromino
-    
+   
 let rotateTetrominoRight tetromino =
     let getBlockPlacementCords (BlockPlacementWithCoordinates cords) = cords
     let tetrominoBlocks = getBlockPlacementsForTetromino tetromino

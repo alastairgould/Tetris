@@ -1,4 +1,4 @@
-﻿module Tetris.Tests
+﻿module Tetris.Tests.Runner
 open Expecto
 
 [<EntryPoint>]
