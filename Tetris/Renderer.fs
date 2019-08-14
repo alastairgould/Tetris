@@ -35,10 +35,10 @@ let private convertFromColorToSfmlColor (color: BlockColor) =
     match color with
     | LightBlue -> SFML.Graphics.Color.Cyan
     | DarkBlue -> SFML.Graphics.Color.Blue
-    | Orange -> SFML.Graphics.Color.Magenta
+    | Orange -> SFML.Graphics.Color(255uy, 102uy, 0uy)
     | Yellow -> SFML.Graphics.Color.Yellow
     | Green -> SFML.Graphics.Color.Green
-    | Purple -> SFML.Graphics.Color.Red
+    | Purple -> SFML.Graphics.Color.Magenta
     | Red -> SFML.Graphics.Color.Red
 
 let private convertFromOptionColorToSfmlColor (color: BlockColor option) = 

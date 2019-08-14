@@ -48,14 +48,14 @@ let private createBlockPlacementCoordinates x y =
     createCoordinates x y |> BlockPlacementWithCoordinates
 
 let createITetromino =
-    let color = Orange 
+    let color = LightBlue 
     let blockPlacements = BlockPlacementsForShape [ for x in 0y .. 3y -> createBlockPlacementCoordinates x 2y ]
     let coloredShape = { Shape = blockPlacements; Color = color }
     I coloredShape
 
 let createOTetromino =
     let blockPlacements = BlockPlacementsForShape ([for y in 0y .. 1y -> [for x in 0y .. 1y -> createBlockPlacementCoordinates x y]] |> List.concat) 
-    let color = Orange
+    let color = Yellow
     let coloredShape = { Shape = blockPlacements; Color = color }
     O coloredShape
 
@@ -63,8 +63,9 @@ let createJTetromino =
     let blockPlacements = BlockPlacementsForShape ([for y in 1y .. 2y -> match y with
                                                                             | y when y = 1y -> [for x in 0y .. 2y -> createBlockPlacementCoordinates x y]
                                                                             | y when y = 2y -> [createBlockPlacementCoordinates 0y y]
+                                                                            | _ -> raise (System.InvalidOperationException("Should never reach this branch"))
                                                    ] |> List.concat) 
-    let color = Orange
+    let color = DarkBlue
     let coloredShape = { Shape = blockPlacements; Color = color }
     O coloredShape
 
@@ -125,9 +126,7 @@ let addTetrominoToGrid tetrisGrid tetromino =
     TetrisGrid gridWithTetromino
     
 let createTetromino =
-    createITetromino
-   
-
+    createJTetromino
    
 let rotateClockwise tetromino =
     let getBlockPlacementCords (BlockPlacementWithCoordinates cords) = cords
@@ -135,7 +134,7 @@ let rotateClockwise tetromino =
     let coloredShape = getColoredShapeFromTetromino tetromino
     
     let blockCoords = tetrominoBlocks |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)
-    let highestBound = findBoundGridSize blockCoords                         
+    let highestBound = findBoundingGridSizeForListOfCoords blockCoords                         
                                        
     let newBlockCords = blockCoords |> List.map(fun blockCords -> rotateCoordinatesRight blockCords highestBound)
                                              |> List.map(fun rotatedCords -> BlockPlacementWithCoordinates rotatedCords)

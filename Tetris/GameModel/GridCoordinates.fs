@@ -20,34 +20,32 @@ type Coordinates = private {
 let createCoordinates x y =
     { X = XCoordinate x; Y = YCoordinate y }
 
-let findBoundGridSize coords =
+let findBoundingGridSizeForListOfCoords coords =
     let getYValue (YCoordinate value) = value
     let getXValue (XCoordinate value) = value
     
-    let listOfYs = coords |> List.map (fun coords -> coords.Y)
-    let listOfXs = coords |> List.map (fun coords -> coords.X)
-   
     let findHighest currentHighest nextValue = if nextValue > currentHighest
-                                                    then nextValue
-                                                    else currentHighest 
-     
-    let highestY = listOfYs |> List.fold findHighest (YCoordinate 0y) |> getYValue
-    let highestX = listOfXs |> List.fold findHighest (XCoordinate 0y) |> getXValue
-   
-    let highestBound = if highestX > highestY
-                        then highestX
-                        else highestY
+                                                then nextValue
+                                                else currentHighest 
     
+    let xCoords = coords |> List.map (fun coords -> coords.X)
+                         |> List.map (getXValue)
+    
+    let yCoords = coords |> List.map (fun coords -> coords.Y)
+                         |> List.map (getYValue)
+   
+    let highestBound = yCoords |> List.append xCoords
+                               |> List.fold findHighest 0y
     highestBound + 1y
         
-let rotateCoordinatesRight coordinates size =
+let rotateCoordinatesRight coordinates boundingGridSize =
     let getXValue (XCoordinate value) = value
     let getYValue (YCoordinate value) = value
    
-    let x = getXValue coordinates.X 
-    let y = getYValue coordinates.Y
+    let oldX = getXValue coordinates.X 
+    let oldY = getYValue coordinates.Y
     
-    let newX = y
-    let newY = 1y - (x - (size - 2y))
+    let newX = oldY
+    let newY = 1y - (oldX - (boundingGridSize - 2y))
     
     {X = XCoordinate newX; Y = YCoordinate newY}
