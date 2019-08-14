@@ -3,13 +3,15 @@ module Tetris.Tests.TetrisExpect
 open Expecto
 open Expecto.Flip
 open Tetris.GameModel.Grid
+open Tetris.GameModel.Grid
 
 let private convertToSimpleGrid grid =
     let getGrid(TetrisGrid grid) = grid
+    let getRow(TetrisGridRow grid) = grid
     let grid = getGrid grid 
-    let returnBoolRow (row: TetrisGridCell list) = row |> List.map(fun cell -> match cell with
-                                                                                | CellWithBlock _ -> 1
-                                                                                | _ -> 0)
+    let returnBoolRow (row: TetrisGridRow) = row |> getRow |> List.map(fun cell -> match cell with
+                                                                                    | CellWithBlock _ -> 1
+                                                                                    | _ -> 0)
     grid |> List.map(returnBoolRow) 
 
 let ShouldEqual expected actual =

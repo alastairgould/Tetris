@@ -43,30 +43,88 @@ type TetrominoMovement = private TetrominoMovement of Coordinates with
         let newPosition = (getTetrominoPositionCords first.Position) + (getTetrominoMovementCords second) |> TetrominoPositionCoordinates
         {first with Position = newPosition}
         
+let private generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
+
 let private createBlockPlacementCoordinates x y =
     createCoordinates x y |> BlockPlacementWithCoordinates
 
+let private createShapeFromVisualArray (list: int list list) =
+    let indexedX = list |> List.map(fun row -> row |> List.zip (generateIndices row.Length))
+    let indexedY = indexedX |> List.rev |> List.zip (generateIndices list.Length)
+    
+    let isBlockPlacement value = if value > 0
+                                    then true
+                                    else false
+    
+    let blockPlacement x y value = if (isBlockPlacement value)
+                                        then Some (createBlockPlacementCoordinates x y)
+                                        else None
+     
+    let blockPlacements = indexedY |> List.collect (fun y -> (snd y) |> List.choose(fun x -> (blockPlacement (fst x) (fst y) (snd x))))
+    blockPlacements |> BlockPlacementsForShape
+
 let createITetromino =
+    let shape = [[0; 0; 0; 0];
+                 [1; 1; 1; 1];
+                 [0; 0; 0; 0];
+                 [0; 0; 0; 0]] |> createShapeFromVisualArray
+
     let color = LightBlue 
-    let blockPlacements = BlockPlacementsForShape [ for x in 0y .. 3y -> createBlockPlacementCoordinates x 2y ]
-    let coloredShape = { Shape = blockPlacements; Color = color }
+    let coloredShape = { Shape = shape; Color = color }
     I coloredShape
 
 let createOTetromino =
-    let blockPlacements = BlockPlacementsForShape ([for y in 0y .. 1y -> [for x in 0y .. 1y -> createBlockPlacementCoordinates x y]] |> List.concat) 
+    let shape = [[1; 1];
+                 [1; 1]]|> createShapeFromVisualArray
+
     let color = Yellow
-    let coloredShape = { Shape = blockPlacements; Color = color }
+    let coloredShape = { Shape = shape; Color = color }
     O coloredShape
 
 let createJTetromino =
-    let blockPlacements = BlockPlacementsForShape ([for y in 1y .. 2y -> match y with
-                                                                            | y when y = 1y -> [for x in 0y .. 2y -> createBlockPlacementCoordinates x y]
-                                                                            | y when y = 2y -> [createBlockPlacementCoordinates 0y y]
-                                                                            | _ -> raise (System.InvalidOperationException("Should never reach this branch"))
-                                                   ] |> List.concat) 
+    let shape = [[1; 0; 0];
+                 [1; 1; 1];
+                 [0; 0; 0]] |> createShapeFromVisualArray
+
     let color = DarkBlue
-    let coloredShape = { Shape = blockPlacements; Color = color }
-    O coloredShape
+    let coloredShape = { Shape = shape; Color = color }
+    J coloredShape
+
+let createLTetromino =
+    let shape = [[0; 0; 1];
+                 [1; 1; 1];
+                 [0; 0; 0]] |> createShapeFromVisualArray
+    
+    let color = Orange
+    let coloredShape = { Shape = shape; Color = color }
+    L coloredShape
+
+let createSTetromino =
+    let shape = [[0; 1; 1];
+                 [1; 1; 0];
+                 [0; 0; 0]] |> createShapeFromVisualArray
+    
+    let color = Green
+    let coloredShape = { Shape = shape; Color = color }
+    S coloredShape
+
+let createTTetromino =
+    let shape = [[0; 1; 0];
+                 [1; 1; 1];
+                 [0; 0; 0]] |> createShapeFromVisualArray
+    
+    let color = Purple
+    let coloredShape = { Shape = shape; Color = color }
+    T coloredShape
+
+let createZTetromino =
+    let shape = [[1; 1; 0];
+                 [0; 1; 1];
+                 [0; 0; 0]] |> createShapeFromVisualArray
+    
+    let color = Red
+    let coloredShape = { Shape = shape; Color = color }
+    T coloredShape
 
 let private getColoredShapeFromTetromino tetromino =
     match tetromino with
@@ -113,7 +171,6 @@ let createTetrominoPositionCoordinates x y =
 let addTetrominoToGrid tetrisGrid tetromino =
     let getGridArray (TetrisGrid grid) = grid
     let getRowList (TetrisGridRow grid) = grid
-    let generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
    
     let grid = getGridArray tetrisGrid
     let xIndexedGrid = grid |> List.map (fun row -> row |> getRowList
@@ -127,7 +184,7 @@ let addTetrominoToGrid tetrisGrid tetromino =
     TetrisGrid gridWithTetromino
     
 let createTetromino =
-    createJTetromino
+    createZTetromino
    
 let rotateClockwise tetromino =
     let getBlockPlacementCords (BlockPlacementWithCoordinates cords) = cords
