@@ -7,11 +7,10 @@ open Tetris.GameModel.Tetromino
 [<Tests>] 
 let tests =
     testList "I tetromino tests" [
-        test "Given an empty grid, when a I tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 4 by 4 test grid``
+        test "Given a I Tetromino, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino 
         
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
 
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 0; 0; 0];
                                                        [1; 1; 1; 1];
@@ -19,12 +18,11 @@ let tests =
                                                        [0; 0; 0; 0]]
         }
     
-        test "Given an empty grid, when a I tetromino is placed on the grid and rotated right, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 4 by 4 test grid``
+        test "Given I tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
                             |> rotateTetrominoRight
                             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 0; 1; 0];
                                                        [0; 0; 1; 0];
@@ -32,13 +30,12 @@ let tests =
                                                        [0; 0; 1; 0]]
         }
         
-        test "Given an empty grid, when a I tetromino is placed on the grid and rotated right twice, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 4 by 4 test grid``
+        test "Given I tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 0; 0; 0];
                                                        [0; 0; 0; 0];
@@ -46,14 +43,13 @@ let tests =
                                                        [0; 0; 0; 0]]
         }
         
-        test "Given an empty grid, when a I tetromino is placed and rotated right three times, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 4 by 4 test grid``
+        test "Given I tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 1; 0; 0];
                                                        [0; 1; 0; 0];
@@ -61,15 +57,14 @@ let tests =
                                                        [0; 1; 0; 0]]
         }
         
-        test "Given an empty grid, when a I tetromino is placed and rotated right four times, then the tetromino should be in the original non rotated position"  {
-            let testGrid = ``empty 4 by 4 test grid``
+        test "Given I tetromino rotated clockwise four times, when the tetromino is placed on the grid, then tetromino should be in the original position"  {
             let tetromino = createITetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
         
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 0; 0; 0];
                                                        [1; 1; 1; 1];
@@ -81,61 +76,56 @@ let tests =
 [<Tests>] 
 let oTetrominoTests =
     testList "O tetromino tests" [
-        test "Given an empty grid, when a O tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 2 by 2 test grid``
+        test "Given a O tetromino, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino 
-        
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 1];
                                                        [1; 1]]
         }
     
-        test "Given an empty grid, when a O tetromino is placed on the grid and rotated right, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 2 by 2 test grid``
+        test "Given a O tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
                             |> rotateTetrominoRight
                             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 1];
                                                        [1; 1]]
         }
         
-        test "Given an empty grid, when a O tetromino is placed on the grid and rotated right twice, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 2 by 2 test grid``
+        test "Given a O tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 1];
                                                        [1; 1]]
         }
         
-        test "Given an empty grid, when a O tetromino is placed and rotated right three times, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 2 by 2 test grid``
+        test "Given a O tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 1];
                                                        [1; 1]]
         }
         
-        test "Given an empty grid, when a O tetromino is placed and rotated right four times, then the tetromino should be in the original non rotated position"  {
-            let testGrid = ``empty 2 by 2 test grid``
+        test "Given a O tetromino rotated clockwise four times, when the tetromino is placed on the grid, then the tetromino should be in the orignal position"  {
             let tetromino = createOTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
         
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 1];
                                                        [1; 1]]
@@ -145,65 +135,60 @@ let oTetrominoTests =
 [<Tests>] 
 let jTetrominoTests =
     testList "J tetromino tests" [
-        test "Given an empty grid, when a J tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 3 by 3 test grid``
+        test "Given a J tetromino, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino 
         
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 0; 0];
                                                        [1; 1; 1];
                                                        [0; 0; 0]]
         }
     
-        test "Given an empty grid, when a J tetromino is placed on the grid and rotated right, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 3 by 3 test grid``
+        test "Given a J tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
                             |> rotateTetrominoRight
                             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 1; 1];
                                                        [0; 1; 0];
                                                        [0; 1; 0]]
         }
         
-        test "Given an empty grid, when a J tetromino is placed on the grid and rotated right twice, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 3 by 3 test grid``
+        test "Given a J tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 0; 0];
                                                        [1; 1; 1];
                                                        [0; 0; 1]]
         }
         
-        test "Given an empty grid, when a J tetromino is placed and rotated right three times, then the following cells in the grid should have blocks"  {
-            let testGrid = ``empty 3 by 3 test grid``
+        test "Given a J tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
             resultingGrid |> TetrisExpect.ShouldEqual [[0; 1; 0];
                                                        [0; 1; 0];
                                                        [1; 1; 0]]
         }
         
-        test "Given an empty grid, when a J tetromino is placed and rotated right four times, then the tetromino should be in the original non rotated position"  {
-            let testGrid = ``empty 3 by 3 test grid``
+        test "Given a J tetromino rotated clockwise four times, when the tetromino is placed on the grid, then the tetromino should be in the original position"  {
             let tetromino = createJTetromino
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
                             |> rotateTetrominoRight
             
-            let resultingGrid = tetromino |> placeTetrominoInTheDefaultPositionOn testGrid
+            let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
         
             resultingGrid |> TetrisExpect.ShouldEqual [[1; 0; 0];
                                                        [1; 1; 1];

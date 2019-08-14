@@ -3,7 +3,7 @@ module Tetris.Tests.TetrominoTestHelpers
 open Tetris.GameModel.Tetromino
 open Tetris.GameModel.Grid
 
-let placeTetrominoInTheDefaultPositionOn grid tetromino =
+let placeTetrominoOn grid tetromino =
       let tetrominoPosition = { Tetromino = tetromino;
                                 Position = createTetrominoPositionCoordinates 0y 0y }
       tetrominoPosition |> addTetrominoToGrid grid
