@@ -129,7 +129,7 @@ let createTetromino =
    
 
    
-let rotateTetrominoRight tetromino =
+let rotateClockwise tetromino =
     let getBlockPlacementCords (BlockPlacementWithCoordinates cords) = cords
     let tetrominoBlocks = getBlockPlacementsForTetromino tetromino
     let coloredShape = getColoredShapeFromTetromino tetromino

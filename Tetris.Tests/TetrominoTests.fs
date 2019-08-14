@@ -20,7 +20,7 @@ let tests =
     
         test "Given I tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
                             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
@@ -32,8 +32,8 @@ let tests =
         
         test "Given I tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
@@ -45,9 +45,9 @@ let tests =
         
         test "Given I tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createITetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
                          
@@ -59,10 +59,10 @@ let tests =
         
         test "Given I tetromino rotated clockwise four times, when the tetromino is placed on the grid, then tetromino should be in the original position"  {
             let tetromino = createITetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 4 by 4 test grid``
         
@@ -87,7 +87,7 @@ let oTetrominoTests =
     
         test "Given a O tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
                             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
@@ -97,8 +97,8 @@ let oTetrominoTests =
         
         test "Given a O tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
@@ -108,9 +108,9 @@ let oTetrominoTests =
         
         test "Given a O tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createOTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
                          
@@ -120,10 +120,10 @@ let oTetrominoTests =
         
         test "Given a O tetromino rotated clockwise four times, when the tetromino is placed on the grid, then the tetromino should be in the orignal position"  {
             let tetromino = createOTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 2 by 2 test grid``
         
@@ -147,7 +147,7 @@ let jTetrominoTests =
     
         test "Given a J tetromino rotated clockwise, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
                             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
@@ -158,8 +158,8 @@ let jTetrominoTests =
         
         test "Given a J tetromino rotated clockwise two times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
@@ -170,9 +170,9 @@ let jTetrominoTests =
         
         test "Given a J tetromino rotated clockwise three times, when the tetromino is placed on the grid, then the following cells in the grid should have blocks"  {
             let tetromino = createJTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
                          
@@ -183,10 +183,10 @@ let jTetrominoTests =
         
         test "Given a J tetromino rotated clockwise four times, when the tetromino is placed on the grid, then the tetromino should be in the original position"  {
             let tetromino = createJTetromino
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
-                            |> rotateTetrominoRight
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
+                            |> rotateClockwise
             
             let resultingGrid = tetromino |> placeTetrominoOn ``empty 3 by 3 test grid``
         
