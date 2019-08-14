@@ -136,8 +136,8 @@ let rotateClockwise tetromino =
     let highestBound = findBoundingGridSizeForListOfCoords blockCoords                         
                                        
     let newBlockCords = blockCoords |> List.map(fun blockCords -> rotateCoordinatesRight blockCords highestBound)
-                                             |> List.map(fun rotatedCords -> BlockPlacementWithCoordinates rotatedCords)
-                                             |> BlockPlacementsForShape
+                                    |> List.map(fun rotatedCords -> BlockPlacementWithCoordinates rotatedCords)
+                                    |> BlockPlacementsForShape
                                         
     let newColoredShape = {coloredShape with Shape = newBlockCords}
     I newColoredShape
