@@ -28,14 +28,10 @@ let findBoundingGridSizeForListOfCoords coords =
                                                 then nextValue
                                                 else currentHighest 
     
-    let xCoords = coords |> List.map (fun coords -> coords.X)
-                         |> List.map (getXValue)
-    
-    let yCoords = coords |> List.map (fun coords -> coords.Y)
-                         |> List.map (getYValue)
-   
-    let highestBound = yCoords |> List.append xCoords
-                               |> List.fold findHighest 0y
+    let highestBound = coords |> List.collect (fun coords -> [coords.X |> getXValue;
+                                                              coords.Y |> getYValue])
+                              |> List.fold findHighest 0y 
+                               
     highestBound + 1y
         
 let rotateCoordinatesRight coordinates boundingGridSize =
