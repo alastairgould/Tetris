@@ -46,13 +46,13 @@ type TetrominoMovement = private TetrominoMovement of Coordinates with
 let private createBlockPlacementCoordinates x y =
     createCoordinates x y |> BlockPlacementWithCoordinates
 
-let private createITetromino =
+let createITetromino =
     let color = Orange 
     let blockPlacements = BlockPlacementsForShape [ for x in -2y .. 1y -> createBlockPlacementCoordinates x 0y ]
     let coloredShape = { Shape = blockPlacements; Color = color }
     I coloredShape
 
-let private createOTetromino =
+let createOTetromino =
     let blockPlacements = BlockPlacementsForShape ([for y in -1y .. 0y -> [for x in -1y .. 0y -> createBlockPlacementCoordinates x y]] |> List.concat) 
     let color = Orange
     let coloredShape = { Shape = blockPlacements; Color = color }
