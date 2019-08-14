@@ -1,8 +1,8 @@
 module Tetris.GameModel.Tetromino
 
 open Tetris.GameModel.BlockColor
-open Tetris.GameModel.GridCoordinates
 open Tetris.GameModel.Grid
+open Tetris.GameModel.GridCoordinates
 
 type TetrominoBlock = private TetrominoBlock of Coordinates
 
