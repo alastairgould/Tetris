@@ -75,7 +75,7 @@ let createITetromino =
 
 let createOTetromino =
     let shape = [[1; 1];
-                 [1; 1]]|> createShapeFromVisualArray
+                 [1; 1]] |> createShapeFromVisualArray
 
     let color = Yellow
     let coloredShape = { Shape = shape; Color = color }
