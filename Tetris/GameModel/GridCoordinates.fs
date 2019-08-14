@@ -44,4 +44,4 @@ let rotateCoordinatesRight coordinates boundingGridSize =
     let newX = oldY
     let newY = 1y - (oldX - (boundingGridSize - 2y))
     
-    {X = XCoordinate newX; Y = YCoordinate newY}
+    createCoordinates newX newY
