@@ -160,7 +160,7 @@ let private shouldCellContainBlock tetromino coordinates =
         | true -> CellWithBlock color
         | false -> CellWithoutBlock
 
-let createTetrominoMovement x y =
+let createTetrominoVelocity x y =
     createCoordinates x y |> TetrominoMovement
 
 let createTetrominoPositionCoordinates x y =

@@ -37,11 +37,11 @@ let bind f stepState =
     
 let reactToInput (stepState: CurrentStepState) (input: InputToGameModel) =
     let handleInput gameModel = match input with 
-                                    | MoveLeft -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoMovement -1y 0y) }
-                                    | MoveRight -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoMovement 1y 0y) }
+                                    | MoveLeft -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoVelocity -1y 0y) }
+                                    | MoveRight -> ReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoVelocity 1y 0y) }
     
     bind handleInput stepState
     
 let stepWorld (stepState: CurrentStepState) =
     let gameModel = stepState |> getGameModelFromStepState
-    NotReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoMovement 0y 0y) }
+    NotReactedToInput { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoVelocity 0y 0y) }
