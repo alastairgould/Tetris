@@ -112,15 +112,17 @@ let createTetrominoPositionCoordinates x y =
     
 let addTetrominoToGrid tetrisGrid tetromino =
     let getGridArray (TetrisGrid grid) = grid
+    let getRowList (TetrisGridRow grid) = grid
     let generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
    
     let grid = getGridArray tetrisGrid
-    let xIndexedGrid = grid |> List.map (fun row -> row |> List.zip (generateIndices row.Length))
+    let xIndexedGrid = grid |> List.map (fun row -> row |> getRowList
+                                                        |> List.zip (generateIndices (getRowList row).Length))
     let yIndexedGrid = xIndexedGrid |> List.zip (generateIndices grid.Length) 
     
-    let gridWithTetromino = yIndexedGrid |> List.map (fun row -> (snd row) |> List.map (fun cell ->
+    let gridWithTetromino = yIndexedGrid |> List.map (fun row -> TetrisGridRow ((snd row) |> List.map (fun cell ->
         let coordinates = createCoordinates (fst cell) (fst row)
-        shouldCellContainBlock tetromino coordinates)) 
+        shouldCellContainBlock tetromino coordinates)))
     
     TetrisGrid gridWithTetromino
     

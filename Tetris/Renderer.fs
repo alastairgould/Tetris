@@ -48,11 +48,12 @@ let private convertFromOptionColorToSfmlColor (color: BlockColor option) =
 
 let private renderGrid (window: RenderWindow) grid =
     let getGridArray (TetrisGrid grid) = grid
+    let getRowList (TetrisGridRow grid) = grid
 
     let yCords = [for y in 0 .. ((getGridArray grid).Length) - 1 -> y] |> List.rev
     let generateXIndexes size = [for x in 0 .. size -> x]
 
-    let xIndexedGrid = (getGridArray grid) |> List.map (fun row -> row |> List.zip (generateXIndexes (row.Length - 1)))
+    let xIndexedGrid = (getGridArray grid) |> List.map (fun row -> row |> getRowList |> List.zip (generateXIndexes ((getRowList row).Length - 1)))
     let yIndexedGrid = xIndexedGrid |> List.zip yCords
 
     let renderableBlockFromCell xPos yPos cell = 

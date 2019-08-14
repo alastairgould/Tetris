@@ -5,5 +5,7 @@ open Tetris.GameModel.BlockColor
 type TetrisGridCell =
     | CellWithBlock of BlockColor
     | CellWithoutBlock
+    
+type TetrisGridRow = TetrisGridRow of TetrisGridCell list
 
-type TetrisGrid = TetrisGrid of (TetrisGridCell list) list
+type TetrisGrid = TetrisGrid of TetrisGridRow list 
