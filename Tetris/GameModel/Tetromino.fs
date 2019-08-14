@@ -1,6 +1,5 @@
 module Tetris.GameModel.Tetromino
 
-open Tetris.GameModel
 open Tetris.GameModel.BlockColor
 open Tetris.GameModel.GridCoordinates
 open Tetris.GameModel.Grid
