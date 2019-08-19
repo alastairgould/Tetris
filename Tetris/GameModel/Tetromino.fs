@@ -41,8 +41,6 @@ type TetrominoVelocity = private TetrominoMovement of Coordinates with
         let newPosition = (getTetrominoPositionCords first.Position) + (getTetrominoMovementCords second) |> TetrominoPositionCoordinates
         {first with Position = newPosition}
         
-let private generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
-
 let private createBlockPlacementCoordinates x y =
     createCoordinates (sbyte x) (sbyte y) |> TetrominoBlock
 
@@ -52,11 +50,11 @@ let private createShapeFromVisualArray (visualArray: int list list) =
                                           | _ -> None
 
     let blockPlacementsForRow yIndex = List.mapi(fun xIndex cellValue -> blockPlacementForCell cellValue xIndex yIndex)
-    let convertToBlockPlacementArray = List.rev >> List.mapi(blockPlacementsForRow)
-    let convertOption2dArrayToFlatList = List.concat >> List.choose(fun element -> element)
+    let convertToBlockPlacement2dOptionList = List.rev >> List.mapi(blockPlacementsForRow)
+    let convertOption2dListToFlatList = List.concat >> List.choose(fun element -> element)
     
-    visualArray |> convertToBlockPlacementArray
-                |> convertOption2dArrayToFlatList
+    visualArray |> convertToBlockPlacement2dOptionList
+                |> convertOption2dListToFlatList
                 |> TetrominoShape
 
 let private createColoredShape color shape =
