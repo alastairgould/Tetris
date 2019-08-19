@@ -52,10 +52,10 @@ let private createShapeFromVisualArray (visualArray: int list list) =
                                           | _ -> None
 
     let blockPlacementsForRow yIndex = List.mapi(fun xIndex cellValue -> blockPlacementForCell cellValue xIndex yIndex)
-    let blockPlacementsForArray = List.rev >> List.mapi(blockPlacementsForRow)
+    let convertToBlockPlacementArray = List.rev >> List.mapi(blockPlacementsForRow)
     let convertOption2dArrayToFlatList = List.concat >> List.choose(fun element -> element)
     
-    visualArray |> blockPlacementsForArray
+    visualArray |> convertToBlockPlacementArray
                 |> convertOption2dArrayToFlatList
                 |> TetrominoShape
 
