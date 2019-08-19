@@ -44,85 +44,67 @@ type TetrominoVelocity = private TetrominoMovement of Coordinates with
 let private generateIndices size = [for x in 0y ..  sbyte (size - 1) -> x]
 
 let private createBlockPlacementCoordinates x y =
-    createCoordinates x y |> TetrominoBlock
+    createCoordinates (sbyte x) (sbyte y) |> TetrominoBlock
 
-let private createShapeFromVisualArray (list: int list list) =
-    let indexedX = list |> List.map(fun row -> row |> List.zip (generateIndices row.Length))
-    let indexedY = indexedX |> List.rev |> List.zip (generateIndices list.Length)
+let private createShapeFromVisualArray (visualArray: int list list) =
+    let blockPlacementForCell value x y = match (value) with
+                                          | 1 -> Some (createBlockPlacementCoordinates x y)
+                                          | _ -> None
+
+    let blockPlacementsForRow yIndex = List.mapi(fun xIndex cellValue -> blockPlacementForCell cellValue xIndex yIndex)
+    let blockPlacementsForArray = List.rev >> List.mapi(blockPlacementsForRow)
+    let convertArrayToFlatList = List.concat >> List.choose(fun element -> element)
     
-    let isBlockPlacement value = if value > 0
-                                    then true
-                                    else false
+    visualArray |> blockPlacementsForArray
+                |> convertArrayToFlatList
+                |> TetrominoShape
+
+let private createColoredShape color shape =
+    { Shape = shape; Color = color }
     
-    let blockPlacement x y value = if (isBlockPlacement value)
-                                        then Some (createBlockPlacementCoordinates x y)
-                                        else None
-     
-    let blockPlacements = indexedY |> List.collect (fun y -> (snd y) |> List.choose(fun x -> (blockPlacement (fst x) (fst y) (snd x))))
-    blockPlacements |> TetrominoShape
+let private createShapeFromVisualArrayWithColor color = createShapeFromVisualArray >> createColoredShape color
 
 let createITetromino =
     let shape = [[0; 0; 0; 0];
                  [1; 1; 1; 1];
                  [0; 0; 0; 0];
-                 [0; 0; 0; 0]] |> createShapeFromVisualArray
-
-    let color = LightBlue 
-    let coloredShape = { Shape = shape; Color = color }
-    I coloredShape
+                 [0; 0; 0; 0]] |> createShapeFromVisualArrayWithColor LightBlue
+    I shape
 
 let createOTetromino =
     let shape = [[1; 1];
-                 [1; 1]] |> createShapeFromVisualArray
-
-    let color = Yellow
-    let coloredShape = { Shape = shape; Color = color }
-    O coloredShape
+                 [1; 1]] |> createShapeFromVisualArrayWithColor Yellow
+    O shape
 
 let createJTetromino =
     let shape = [[1; 0; 0];
                  [1; 1; 1];
-                 [0; 0; 0]] |> createShapeFromVisualArray
-
-    let color = DarkBlue
-    let coloredShape = { Shape = shape; Color = color }
-    J coloredShape
+                 [0; 0; 0]] |> createShapeFromVisualArrayWithColor DarkBlue
+    J shape
 
 let createLTetromino =
     let shape = [[0; 0; 1];
                  [1; 1; 1];
-                 [0; 0; 0]] |> createShapeFromVisualArray
-    
-    let color = Orange
-    let coloredShape = { Shape = shape; Color = color }
-    L coloredShape
+                 [0; 0; 0]] |> createShapeFromVisualArrayWithColor Orange
+    L shape
 
 let createSTetromino =
     let shape = [[0; 1; 1];
                  [1; 1; 0];
-                 [0; 0; 0]] |> createShapeFromVisualArray
-    
-    let color = Green
-    let coloredShape = { Shape = shape; Color = color }
-    S coloredShape
+                 [0; 0; 0]] |> createShapeFromVisualArrayWithColor Green
+    S shape
 
 let createTTetromino =
     let shape = [[0; 1; 0];
                  [1; 1; 1];
-                 [0; 0; 0]] |> createShapeFromVisualArray
-    
-    let color = Purple
-    let coloredShape = { Shape = shape; Color = color }
-    T coloredShape
+                 [0; 0; 0]] |> createShapeFromVisualArrayWithColor Purple
+    T shape
 
 let createZTetromino =
     let shape = [[1; 1; 0];
                  [0; 1; 1];
-                 [0; 0; 0]] |> createShapeFromVisualArray
-    
-    let color = Red
-    let coloredShape = { Shape = shape; Color = color }
-    Z coloredShape
+                 [0; 0; 0]] |> createShapeFromVisualArrayWithColor Red
+    Z shape
 
 let private getColoredShapeFromTetromino tetromino =
     match tetromino with
@@ -182,7 +164,7 @@ let addTetrominoToGrid tetrisGrid tetromino =
     TetrisGrid gridWithTetromino
     
 let createTetromino =
-    createZTetromino
+    createTTetromino
    
 let rotateClockwise tetromino =
     let getBlockPlacementCords (TetrominoBlock cords) = cords
