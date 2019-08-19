@@ -42,19 +42,23 @@ type TetrominoVelocity = private TetrominoMovement of Coordinates with
         {first with Position = newPosition}
         
 let private createBlockPlacementCoordinates x y =
-    createCoordinates (sbyte x) (sbyte y) |> TetrominoBlock
+    createCoordinatesWithIntegers x y |> TetrominoBlock
+    
+let private getBlockPlacementCords (TetrominoBlock cords) = cords
+
+let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
 
 let private createShapeFromVisualArray (visualArray: int list list) =
     let blockPlacementForCell value x y = match (value) with
                                           | 1 -> Some (createBlockPlacementCoordinates x y)
                                           | _ -> None
 
-    let blockPlacementsForRow yIndex = List.mapi(fun xIndex cellValue -> blockPlacementForCell cellValue xIndex yIndex)
-    let convertToBlockPlacement2dOptionList = List.rev >> List.mapi(blockPlacementsForRow)
-    let convertOption2dListToFlatList = List.concat >> List.choose(fun element -> element)
+    let blockPlacementForRow yIndex = List.mapi (fun xIndex cellValue -> blockPlacementForCell cellValue xIndex yIndex)
+    let convertVisualTetrominoArrayToBlockPlacement2dOptionList = List.rev >> List.mapi (blockPlacementForRow)
+    let convertOption2dListToFlatListWithoutNone = List.concat >> List.choose (fun element -> element)
     
-    visualArray |> convertToBlockPlacement2dOptionList
-                |> convertOption2dListToFlatList
+    visualArray |> convertVisualTetrominoArrayToBlockPlacement2dOptionList
+                |> convertOption2dListToFlatListWithoutNone
                 |> TetrominoShape
 
 let private createColoredShape color shape =
@@ -104,6 +108,16 @@ let createZTetromino =
                  [0; 0; 0]] |> createShapeFromVisualArrayWithColor Red
     Z shape
 
+let private bind f tetromino=
+    match tetromino with
+        | I coloredShape -> I (f coloredShape)
+        | O coloredShape -> O (f coloredShape)
+        | T coloredShape -> T (f coloredShape)
+        | S coloredShape -> S (f coloredShape)
+        | Z coloredShape -> Z (f coloredShape)
+        | J coloredShape -> J (f coloredShape)
+        | L coloredShape -> L (f coloredShape)
+
 let private getColoredShapeFromTetromino tetromino =
     match tetromino with
         | I coloredShape -> coloredShape
@@ -147,34 +161,31 @@ let createTetrominoPositionCoordinates x y =
     createCoordinates x y |> TetrominoPositionCoordinates
     
 let addTetrominoToGrid tetrisGrid tetromino =
-    let getGridArray (TetrisGrid grid) = grid
-    let getRowList (TetrisGridRow grid) = grid
-   
-    let grid = getGridArray tetrisGrid
-    let xIndexedGrid = grid |> List.map (fun row -> row |> getRowList
-                                                        |> List.zip (generateIndices (getRowList row).Length))
-    let yIndexedGrid = xIndexedGrid |> List.zip (generateIndices grid.Length) 
+    let rowWithTetromino yIndex = List.mapi (fun xIndex _ ->
+        createCoordinatesWithIntegers xIndex yIndex |> shouldCellContainBlock tetromino)
     
-    let gridWithTetromino = yIndexedGrid |> List.map (fun row -> TetrisGridRow ((snd row) |> List.map (fun cell ->
-        let coordinates = createCoordinates (fst cell) (fst row)
-        shouldCellContainBlock tetromino coordinates)))
-    
-    TetrisGrid gridWithTetromino
+    let tetrisRowWithTetromino yIndex = getRowList >> rowWithTetromino yIndex >> TetrisGridRow
+
+    tetrisGrid
+        |> getGridArray
+        |> List.mapi(tetrisRowWithTetromino)
+        |> TetrisGrid
     
 let createTetromino =
     createTTetromino
-   
-let rotateClockwise tetromino =
-    let getBlockPlacementCords (TetrominoBlock cords) = cords
-    let tetrominoBlocks = getBlockPlacementsForTetromino tetromino
-    let coloredShape = getColoredShapeFromTetromino tetromino
+
+let private rotateTetrominoShapeClockwise tetrominoShape = 
+    let getBlockCoords shape = shape |> getBlocksFromTetrominoShape
+                                     |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)
     
-    let blockCoords = tetrominoBlocks |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)
-    let highestBound = findBoundingGridSizeForListOfCoords blockCoords                         
-                                       
-    let newBlockCords = blockCoords |> List.map(fun blockCords -> rotateCoordinatesRight blockCords highestBound)
-                                    |> List.map(fun rotatedCords -> TetrominoBlock rotatedCords)
-                                    |> TetrominoShape
-                                        
-    let newColoredShape = {coloredShape with Shape = newBlockCords}
-    I newColoredShape
+    let highestBound (blockCoords: Coordinates list) = findBoundingGridSizeForListOfCoords blockCoords
+
+    let blockCoords = tetrominoShape |> getBlockCoords
+    let highestBound = highestBound blockCoords
+    blockCoords |> List.map(fun blockCords -> rotateCoordinatesRight blockCords highestBound)
+    |> List.map(fun rotatedCords -> TetrominoBlock rotatedCords)
+    |> TetrominoShape
+ 
+let rotateClockwise tetromino =
+    let newShape shape = {shape with Shape = shape.Shape |> rotateTetrominoShapeClockwise}
+    bind newShape tetromino    

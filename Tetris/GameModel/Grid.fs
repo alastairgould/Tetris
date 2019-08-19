@@ -9,3 +9,7 @@ type TetrisGridCell =
 type TetrisGridRow = TetrisGridRow of TetrisGridCell list
 
 type TetrisGrid = TetrisGrid of TetrisGridRow list 
+
+let getGridArray (TetrisGrid grid) = grid
+
+let getRowList (TetrisGridRow grid) = grid

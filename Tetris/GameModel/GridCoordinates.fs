@@ -20,6 +20,8 @@ type Coordinates = private {
 let createCoordinates x y =
     { X = XCoordinate x; Y = YCoordinate y }
 
+let createCoordinatesWithIntegers (x: int32) (y: int32) = createCoordinates (sbyte x) (sbyte y)
+
 let findBoundingGridSizeForListOfCoords coords =
     let getYValue (YCoordinate value) = value
     let getXValue (XCoordinate value) = value
