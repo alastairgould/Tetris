@@ -22,6 +22,20 @@ let createCoordinates x y =
 
 let createCoordinatesWithIntegers (x: int32) (y: int32) = createCoordinates (sbyte x) (sbyte y)
 
+let isCoordinatesOutOfBounds coordinates =
+    let getYValue (YCoordinate value) = value
+    let getXValue (XCoordinate value) = value
+
+    let x = coordinates.X |> getXValue
+    let y = coordinates.Y |> getYValue
+    
+    if x < 0y || x > 9y then
+        true
+    elif y < 0y || y > 19y then
+        true
+    else
+        false
+
 let findBoundingGridSizeForListOfCoords coords =
     let getYValue (YCoordinate value) = value
     let getXValue (XCoordinate value) = value

@@ -10,6 +10,7 @@
         <Compile Include="GameModel\Grid.fs" />
         <Compile Include="GameModel\GridCoordinates.fs" />
         <Compile Include="GameModel\Tetromino.fs" />
+        <Compile Include="GameModel\Collision.fs" />
         <Compile Include="GameModel\GameModel.fs" />
         <Compile Include="Renderer.fs" />
         <Compile Include="Input.fs" />

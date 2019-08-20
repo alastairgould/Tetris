@@ -1,5 +1,6 @@
 module Tetris.GameModel.Tetromino
 
+open System
 open Tetris.GameModel.BlockColor
 open Tetris.GameModel.Grid
 open Tetris.GameModel.GridCoordinates
@@ -128,9 +129,6 @@ let private apply f tetromino=
         | J coloredShape -> f coloredShape
         | L coloredShape -> f coloredShape
 
-let private translateBlockPlacement blockPlacement tetrominoPosition =
-    blockPlacement + tetrominoPosition 
-
 let convertTetrominoWithPositionToTetrominoBlockList (tetromino: TetrominoWithPosition) =
     let translateColoredShapeToTetrominoBlocksOnGrid (position: TetrominoPosition) (coloredShape: ColoredTetrominoShape)  =
         let tetrominoBlocks = coloredShape.Shape |> getBlocksFromTetrominoShape
@@ -157,13 +155,45 @@ let createTetrominoVelocity x y =
 
 let createTetrominoPositionCoordinates x y =
     createCoordinates x y |> TetrominoPositionCoordinates
+   
+let tetrominoOverlaps tetrisGrid tetromino =
+    let translatedBlocks = convertTetrominoWithPositionToTetrominoBlockList tetromino
+    
+    let areAnyTranslatedBlocksOutOfBounds = List.map(getBlockPlacementCords)
+                                            >> List.map(isCoordinatesOutOfBounds)
+                                            >> List.contains(true)
+    
+    let overlappingBlock (currentCell: TetrisGridCell) translatedBlocks coordinates =
+       let shouldContainBlock = shouldCellContainBlock translatedBlocks coordinates 
+       let currentlyContainsBlock = match currentCell with
+                                    | CellWithBlock _ -> true
+                                    | CellWithoutBlock _ -> false
+       shouldContainBlock && currentlyContainsBlock
+    
+    let rowWithTetromino yIndex = List.mapi (fun xIndex cell ->
+        createCoordinatesWithIntegers xIndex yIndex |> overlappingBlock cell translatedBlocks)
+    
+    let tetrisRowWithTetromino yIndex = getRowList >> rowWithTetromino yIndex
+    
+    let outOfBounds = areAnyTranslatedBlocksOutOfBounds translatedBlocks
+    
+    if outOfBounds
+        then true
+    else
+        tetrisGrid
+                |> getGridArray
+                |> List.mapi(tetrisRowWithTetromino)
+                |> List.concat
+                |> List.contains(true)
     
 let addTetrominoToGrid tetrisGrid tetromino =
     let translatedBlocks = convertTetrominoWithPositionToTetrominoBlockList tetromino
     let color = apply (fun shape -> shape.Color) tetromino.Tetromino
     
-    let rowWithTetromino yIndex = List.mapi (fun xIndex _ ->
-        createCoordinatesWithIntegers xIndex yIndex |> createCellForCoordinates color translatedBlocks)
+    let rowWithTetromino yIndex = List.mapi (fun xIndex cell ->
+        match cell with
+            | CellWithBlock _c -> cell
+            | CellWithoutBlock -> createCoordinatesWithIntegers xIndex yIndex |> createCellForCoordinates color translatedBlocks)
     
     let tetrisRowWithTetromino yIndex = getRowList >> rowWithTetromino yIndex >> TetrisGridRow
 
@@ -172,9 +202,20 @@ let addTetrominoToGrid tetrisGrid tetromino =
         |> List.mapi(tetrisRowWithTetromino)
         |> TetrisGrid
     
-let createTetromino =
-    createTTetromino
-
+let createTetromino() =
+    let randomGenerator = System.Random()
+    let randomNumber = randomGenerator.Next(0, 7)
+    
+    match randomNumber with
+        | 0 -> createITetromino
+        | 1 -> createJTetromino
+        | 2 -> createLTetromino
+        | 3 -> createOTetromino
+        | 4 -> createSTetromino
+        | 5 -> createTTetromino
+        | 6 -> createZTetromino
+        | _ -> raise(InvalidOperationException("Random number generated a number out of expected range"))
+    
 let private rotateTetrominoShapeClockwise tetrominoShape = 
     let blockCoords = tetrominoShape |> getBlocksFromTetrominoShape
                                      |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)

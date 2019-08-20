@@ -5,7 +5,7 @@ open Tetris.GameModel.GameModel
 open Tetris.Renderer
 
 let processStep (stopWatch: Stopwatch) gameModel =
-    if stopWatch.Elapsed.TotalSeconds > 0.5 then
+    if stopWatch.Elapsed.TotalSeconds > 0.25 then
         stopWatch.Reset()
         stopWatch.Start()
         stepWorld gameModel
