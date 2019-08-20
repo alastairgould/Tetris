@@ -41,6 +41,8 @@ type TetrominoVelocity = private TetrominoMovement of Coordinates with
         let getTetrominoPositionCords (TetrominoPositionCoordinates cords) = cords
         let newPosition = (getTetrominoPositionCords first.Position) + (getTetrominoMovementCords second) |> TetrominoPositionCoordinates
         {first with Position = newPosition}
+
+let private randomGenerator = System.Random()
         
 let private createBlockPlacementCoordinates x y =
     createCoordinatesWithIntegers x y |> TetrominoBlock
@@ -201,8 +203,6 @@ let addTetrominoToGrid tetrisGrid tetromino =
         |> getGridArray
         |> List.mapi(tetrisRowWithTetromino)
         |> TetrisGrid
-    
-let private randomGenerator = System.Random()
     
 let createTetromino() =
     let randomNumber = randomGenerator.Next(0, 7)
