@@ -227,4 +227,10 @@ let private rotateTetrominoShapeClockwise tetrominoShape =
                 |> TetrominoShape
  
 let rotateClockwise =
-    map (fun shape -> {shape with Shape = shape.Shape |> rotateTetrominoShapeClockwise})
+    map (fun shape -> {shape with Shape = shape.Shape |> rotateTetrominoShapeClockwise })
+
+let rotateAntiClockwise =
+    map (fun shape -> {shape with Shape = shape.Shape
+                                          |> rotateTetrominoShapeClockwise
+                                          |> rotateTetrominoShapeClockwise
+                                          |> rotateTetrominoShapeClockwise })

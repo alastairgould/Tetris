@@ -17,10 +17,15 @@ let getGridArray (TetrisGrid grid) = grid
 
 let getRowList (TetrisGridRow grid) = grid
 
+let getCellColor cell =
+    match cell with
+        | CellWithBlock color -> Some color
+        | CellWithoutBlock -> None 
+
 let private createEmptyRow =
     TetrisGridRow [for x in 1 .. width -> CellWithoutBlock]
     
-let private isRowFull (row: TetrisGridRow) =
+let private isRowFull row =
     let emptyCells = row |> getRowList |> List.filter(fun cell -> cell = CellWithoutBlock)
     emptyCells.Length <> 0
 
