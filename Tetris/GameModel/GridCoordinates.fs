@@ -50,7 +50,7 @@ let findBoundingGridSizeForListOfCoords coords =
                                
     highestBound + 1y
         
-let rotateCoordinatesRight coordinates boundingGridSize =
+let rotateCoordinatesClockwise coordinates boundingGridSize =
     let getXValue (XCoordinate value) = value
     let getYValue (YCoordinate value) = value
    

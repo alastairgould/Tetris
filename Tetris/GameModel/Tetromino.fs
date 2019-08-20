@@ -222,7 +222,7 @@ let private rotateTetrominoShapeClockwise tetrominoShape =
     
     let highestBound = findBoundingGridSizeForListOfCoords blockCoords
     
-    blockCoords |> List.map(fun blockCords -> rotateCoordinatesRight blockCords highestBound)
+    blockCoords |> List.map(fun blockCords -> rotateCoordinatesClockwise blockCords highestBound)
                 |> List.map(fun rotatedCords -> TetrominoBlock rotatedCords)
                 |> TetrominoShape
  
