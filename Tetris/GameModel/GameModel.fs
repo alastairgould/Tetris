@@ -30,7 +30,7 @@ let renderableGrid stepState =
 
 let createInitialGameModel = 
     let tetrominoWithPosition = { Position = createTetrominoPositionCoordinates 3y 17y; Tetromino = createTetromino() }
-    let grid = TetrisGrid ([for y in 0 .. 19 -> TetrisGridRow [for x in 0 .. 9-> CellWithoutBlock]])
+    let grid = createEmptyGrid
     NotReactedToInput { Tetromino = tetrominoWithPosition; Grid = grid }
     
 let bind f stepState =

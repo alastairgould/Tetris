@@ -2,6 +2,9 @@ module Tetris.GameModel.Grid
 
 open Tetris.GameModel.BlockColor
 
+let private height = 20
+let private width = 10
+
 type TetrisGridCell =
     | CellWithBlock of BlockColor
     | CellWithoutBlock
@@ -14,20 +17,19 @@ let getGridArray (TetrisGrid grid) = grid
 
 let getRowList (TetrisGridRow grid) = grid
 
-let createEmptyRow =
-    TetrisGridRow [for x in 0 .. 9 -> CellWithoutBlock]
+let private createEmptyRow =
+    TetrisGridRow [for x in 1 .. width -> CellWithoutBlock]
+    
+let private isRowFull (row: TetrisGridRow) =
+    let emptyCells = row |> getRowList |> List.filter(fun cell -> cell = CellWithoutBlock)
+    emptyCells.Length <> 0
+
+let createEmptyGrid =
+    TetrisGrid [for x in 1 .. height -> createEmptyRow]
 
 let removeFilledRows tetrisGrid =
-    
-    let isRowEmpty (row: TetrisGridRow) =
-        let emptyCells = row |> getRowList |> List.filter(fun cell -> cell = CellWithoutBlock)
-        emptyCells.Length <> 0
-    
     let tetrisGridList = tetrisGrid |> getGridArray
-    
-    let tetrisGridWithNoFullRows = tetrisGridList |> List.filter(isRowEmpty)
-    let amountOfNewRows = 19 - tetrisGridWithNoFullRows.Length
-    
-    let newRows = [for y in 0 .. amountOfNewRows -> createEmptyRow]
-    
-    tetrisGridWithNoFullRows |> List.rev |> List.append newRows |> List.rev |> TetrisGrid
+    let fullRows = tetrisGridList |> List.filter(fun row -> not (row |> isRowFull))
+    let tetrisGridWithNoFullRows = tetrisGridList |> List.filter(isRowFull)
+    let newEmptyRows = fullRows |> List.map(fun _ -> createEmptyRow)
+    tetrisGridWithNoFullRows |> List.rev |> List.append newEmptyRows |> List.rev |> TetrisGrid
