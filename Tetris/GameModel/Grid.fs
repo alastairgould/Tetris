@@ -14,8 +14,8 @@ let getGridArray (TetrisGrid grid) = grid
 
 let getRowList (TetrisGridRow grid) = grid
 
-let createRow =
-    TetrisGridRow [for x in 0 .. 9 -> CellWithoutBlock ]
+let createEmptyRow =
+    TetrisGridRow [for x in 0 .. 9 -> CellWithoutBlock]
 
 let removeFilledRows tetrisGrid =
     
@@ -28,6 +28,6 @@ let removeFilledRows tetrisGrid =
     let tetrisGridWithNoFullRows = tetrisGridList |> List.filter(isRowEmpty)
     let amountOfNewRows = 19 - tetrisGridWithNoFullRows.Length
     
-    let newRows = [for y in 0 .. amountOfNewRows -> createRow]
+    let newRows = [for y in 0 .. amountOfNewRows -> createEmptyRow]
     
     tetrisGridWithNoFullRows |> List.rev |> List.append newRows |> List.rev |> TetrisGrid

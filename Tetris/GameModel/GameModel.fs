@@ -88,7 +88,6 @@ let stepWorld (stepState: CurrentStepState) =
         let placedGrid = { Grid = (addTetrominoToGrid gameModel.Grid gameModel.Tetromino); Tetromino = newTetromino()}
         { placedGrid with Grid = removeFilledRows placedGrid.Grid } 
         
-    
     match outcome with
         | TetrominoPlaced -> NotReactedToInput placeTetromino
         | CantTakeAction -> NotReactedToInput placeTetromino
