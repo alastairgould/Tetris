@@ -18,6 +18,7 @@ type InputToGameModel =
     | MoveLeft
     | MoveRight
     | RotateClockwise
+    | RotateAntiClockwise
 
 let private  getGameModelFromStepState stepState =
     match stepState with
@@ -49,6 +50,17 @@ let handleInputRotateClockwise gameModel =
         | TakeAction -> ReactedToInput newGameModel
         | CantTakeAction -> NotReactedToInput gameModel
 
+let handleInputRotateAntiClockwise gameModel =
+    let tetrominoWithPosition = gameModel.Tetromino
+    let rotatedTetromino = rotateAntiClockwise tetrominoWithPosition.Tetromino
+    let newGameModel = { gameModel with Tetromino = { tetrominoWithPosition with Tetromino = rotatedTetromino} }
+    
+    let outcome = checkMovement newGameModel.Grid newGameModel.Tetromino
+    
+    match outcome with
+        | TakeAction -> ReactedToInput newGameModel
+        | CantTakeAction -> NotReactedToInput gameModel
+
 let handleInputMoveLeft (gameModel: GameModel) =
     let newGameModel = { gameModel with Tetromino = gameModel.Tetromino + (createTetrominoVelocity -1y 0y) }
     let outcome = checkMovement newGameModel.Grid newGameModel.Tetromino
@@ -70,7 +82,7 @@ let reactToInput (stepState: CurrentStepState) (input: InputToGameModel) =
                                     | MoveLeft -> handleInputMoveLeft gameModel
                                     | MoveRight -> handleInputMoveRight gameModel
                                     | RotateClockwise -> handleInputRotateClockwise gameModel
-    
+                                    | RotateAntiClockwise -> handleInputRotateAntiClockwise gameModel
     bind handleInput stepState
 
 let newTetromino() = 

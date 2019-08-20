@@ -12,7 +12,9 @@ let getProgramInput() =
         Some (GameModelInput MoveRight)
     elif Keyboard.IsKeyPressed Keyboard.Key.Left then
         Some (GameModelInput MoveLeft)
-    elif Keyboard.IsKeyPressed Keyboard.Key.Space then
+    elif Keyboard.IsKeyPressed Keyboard.Key.LAlt then
+        Some (GameModelInput RotateAntiClockwise)
+    elif Keyboard.IsKeyPressed Keyboard.Key.LControl then
         Some (GameModelInput RotateClockwise)
     elif Keyboard.IsKeyPressed Keyboard.Key.Escape then
         Some Quit
