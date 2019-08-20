@@ -202,8 +202,9 @@ let addTetrominoToGrid tetrisGrid tetromino =
         |> List.mapi(tetrisRowWithTetromino)
         |> TetrisGrid
     
+let private randomGenerator = System.Random()
+    
 let createTetromino() =
-    let randomGenerator = System.Random()
     let randomNumber = randomGenerator.Next(0, 7)
     
     match randomNumber with
@@ -230,7 +231,4 @@ let rotateClockwise =
     map (fun shape -> {shape with Shape = shape.Shape |> rotateTetrominoShapeClockwise })
 
 let rotateAntiClockwise =
-    map (fun shape -> {shape with Shape = shape.Shape
-                                          |> rotateTetrominoShapeClockwise
-                                          |> rotateTetrominoShapeClockwise
-                                          |> rotateTetrominoShapeClockwise })
+    rotateClockwise >> rotateClockwise >> rotateClockwise
