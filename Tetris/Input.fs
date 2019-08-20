@@ -20,4 +20,3 @@ let getProgramInput() =
         Some Quit
     else
         None
-
