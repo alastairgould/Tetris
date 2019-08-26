@@ -17,22 +17,22 @@ type Tetromino =
 
 type TetrominoPosition = private TetrominoPositionCoordinates of Coordinates
 
+type TetrominoVelocity = private TetrominoVelocity of Coordinates
+
 type TetrominoWithPosition = {
     Position: TetrominoPosition;
     Tetromino: Tetromino;
 }
 
-type TetrominoVelocity = private TetrominoMovement of Coordinates
-
 let private randomGenerator = System.Random()
 
 let createTetrominoPositionCoordinates x y = createCoordinates x y |> TetrominoPositionCoordinates
 
-let createTetrominoVelocity x y = createCoordinates x y |> TetrominoMovement
+let createTetrominoVelocity x y = createCoordinates x y |> TetrominoVelocity
         
 let getTetrominoPositionCoordinates (TetrominoPositionCoordinates cords) = cords
     
-let getTetrominoMovementCoordinates (TetrominoMovement cords) = cords
+let getTetrominoMovementCoordinates (TetrominoVelocity cords) = cords
 
 let moveTetrominoByTetrominoVelocity tetrominoWithPosition velocity = 
     let newPosition = (getTetrominoPositionCoordinates tetrominoWithPosition.Position) + (getTetrominoMovementCoordinates velocity) |> TetrominoPositionCoordinates
@@ -92,7 +92,7 @@ let private map f tetromino=
         | J coloredShape -> J (f coloredShape)
         | L coloredShape -> L (f coloredShape)
 
-let private apply f tetromino=
+let private bind f tetromino=
     match tetromino with
         | I coloredShape -> f coloredShape
         | O coloredShape -> f coloredShape
@@ -104,16 +104,12 @@ let private apply f tetromino=
 
 let tetrominoOverlaps tetrisGrid tetromino =
     let tetrominoPosition = getTetrominoPositionCoordinates tetromino.Position
-    let shapeOnGridCoordinates = apply (translateColoredShapeToGridCoordinates tetrominoPosition) tetromino.Tetromino
-
-    if isShapeOutsideOfBounds shapeOnGridCoordinates
-        then true
-    else
-        doesColoredShapeOverlapWithBlocksOnGrid tetrisGrid shapeOnGridCoordinates
+    let shapeOnGridCoordinates = bind (translateColoredShapeToGridCoordinates tetrominoPosition) tetromino.Tetromino
+    (isShapeOutsideOfBounds shapeOnGridCoordinates) || doesColoredShapeOverlapWithBlocksOnGrid tetrisGrid shapeOnGridCoordinates
     
-let addTetrominoToGrid tetrisGrid (tetromino: TetrominoWithPosition) =
-    let tetrominoPosition = getTetrominoPositionCoordinates tetromino.Position
-    let shapeOnGridCoordinates = apply (translateColoredShapeToGridCoordinates tetrominoPosition) tetromino.Tetromino
+let addTetrominoToGrid tetrisGrid tetromino =
+    let translateShape = getTetrominoPositionCoordinates tetromino.Position|> translateColoredShapeToGridCoordinates
+    let shapeOnGridCoordinates = bind translateShape tetromino.Tetromino
     addColoredShapeToGrid tetrisGrid shapeOnGridCoordinates
     
 let createTetromino() =
