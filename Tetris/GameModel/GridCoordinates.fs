@@ -33,7 +33,7 @@ let createCoordinatesWithIntegers x y = createCoordinates (sbyte x) (sbyte y)
 
 let isCoordinatesOutOfBounds coordinates =
     let x, y = toTuple coordinates
-    x < 0y || x > Grid.width - 1y || y < 0y || y > Grid.height - 1y
+    x < 0y || x > Grid.width - 1y || y < 0y 
 
 let findBoundingGridSizeForListOfCoords coords =
     let findHighest currentHighest nextValue = if nextValue > currentHighest

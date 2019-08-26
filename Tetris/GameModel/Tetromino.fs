@@ -39,13 +39,13 @@ let createTetrominoVelocity x y = createCoordinates x y |> TetrominoMovement
         
 let private createBlockPlacementCoordinates x y = createCoordinatesWithIntegers x y |> TetrominoBlock
     
-let private getBlockPlacementCords (TetrominoBlock cords) = cords
+let private getBlockPlacementCoordinates (TetrominoBlock cords) = cords
 
 let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
     
-let getTetrominoPositionCords (TetrominoPositionCoordinates cords) = cords
+let getTetrominoPositionCoordinates (TetrominoPositionCoordinates cords) = cords
     
-let getTetrominoMovementCords (TetrominoMovement cords) = cords
+let getTetrominoMovementCoordinates (TetrominoMovement cords) = cords
 
 let private createShapeFromVisualArray (visualArray: int list list) =
     let blockPlacementForCell value x y = match (value) with
@@ -63,12 +63,12 @@ let private createShapeFromVisualArray (visualArray: int list list) =
 let private createColoredShape color shape = { Shape = shape; Color = color }
     
 let private translateTetrominoBlockByPosition tetrominoBlock position = 
-        (getBlockPlacementCords tetrominoBlock) + (getTetrominoPositionCords position) |> TetrominoBlock
+        (getBlockPlacementCoordinates tetrominoBlock) + (getTetrominoPositionCoordinates position) |> TetrominoBlock
     
 let private createShapeFromVisualArrayWithColor color = createShapeFromVisualArray >> createColoredShape color
 
 let moveTetrominoByTetrominoVelocity tetrominoWithPosition velocity = 
-    let newPosition = (getTetrominoPositionCords tetrominoWithPosition.Position) + (getTetrominoMovementCords velocity) |> TetrominoPositionCoordinates
+    let newPosition = (getTetrominoPositionCoordinates tetrominoWithPosition.Position) + (getTetrominoMovementCoordinates velocity) |> TetrominoPositionCoordinates
     {tetrominoWithPosition with Position = newPosition}
 
 let moveTetrominoByVelocity tetrominoWithPosition dX dY = moveTetrominoByTetrominoVelocity tetrominoWithPosition (createTetrominoVelocity dX dY)
@@ -161,7 +161,7 @@ let createTetrominoPositionCoordinates x y = createCoordinates x y |> TetrominoP
 let tetrominoOverlaps tetrisGrid tetromino =
     let translatedBlocks = convertTetrominoWithPositionToTetrominoBlockList tetromino
     
-    let areAnyTranslatedBlocksOutOfBounds = List.map(getBlockPlacementCords)
+    let areAnyTranslatedBlocksOutOfBounds = List.map(getBlockPlacementCoordinates)
                                             >> List.map(isCoordinatesOutOfBounds)
                                             >> List.contains(true)
     
@@ -219,7 +219,7 @@ let createTetromino() =
     
 let private rotateTetrominoShapeClockwise tetrominoShape = 
     let blockCoords = tetrominoShape |> getBlocksFromTetrominoShape
-                                     |> List.map(fun blockCoordinate -> getBlockPlacementCords blockCoordinate)
+                                     |> List.map(fun blockCoordinate -> getBlockPlacementCoordinates blockCoordinate)
     
     let highestBound = findBoundingGridSizeForListOfCoords blockCoords
     

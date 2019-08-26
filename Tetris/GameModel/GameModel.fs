@@ -25,16 +25,13 @@ let private  getGameModelFromStepState stepState =
         | ReactedToInput state -> state
         | NotReactedToInput state -> state
 
-let private newTetromino() = { Position = createTetrominoPositionCoordinates 3y 17y; Tetromino = createTetromino() }
+let private newTetromino() = { Position = createTetrominoPositionCoordinates 3y 20y; Tetromino = createTetromino() }
 
 let renderableGrid stepState =
     let gameModel = stepState |> getGameModelFromStepState 
     addTetrominoToGrid gameModel.Grid gameModel.Tetromino
 
-let createInitialGameModel = 
-    let tetrominoWithPosition = newTetromino()
-    let grid = createEmptyGrid
-    NotReactedToInput { Tetromino = tetrominoWithPosition; Grid = grid }
+let createInitialGameModel = NotReactedToInput { Tetromino = newTetromino(); Grid = createEmptyGrid }
     
 let bind f stepState =
     match stepState with
