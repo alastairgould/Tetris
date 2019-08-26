@@ -27,13 +27,13 @@ let private isRowFull row =
 
 let private createEmptyRow =
     TetrisGridRow [for x in 1y .. width -> CellWithoutBlock]
-
+    
 let createEmptyGrid =
     TetrisGrid [for y in 1y .. height -> createEmptyRow]
 
 let removeFilledRows tetrisGrid =
     let tetrisGridList = tetrisGrid |> getGridArray
-    let fullRows = tetrisGridList |> List.filter(fun row -> not (row |> isRowFull))
-    let tetrisGridWithNoFullRows = tetrisGridList |> List.filter(isRowFull)
-    let newEmptyRows = fullRows |> List.map(fun _ -> createEmptyRow)
-    tetrisGridWithNoFullRows |> List.rev |> List.append newEmptyRows |> List.rev |> TetrisGrid
+    let rowsWhichAreFull = tetrisGridList |> List.filter(fun row -> not (row |> isRowFull))
+    let tetrisRowsWithFullRowsRemoved = tetrisGridList |> List.filter(isRowFull)
+    let newEmptyRowsToReplaceRemovedRows = rowsWhichAreFull |> List.map(fun _ -> createEmptyRow)
+    tetrisRowsWithFullRowsRemoved |> List.rev |> List.append newEmptyRowsToReplaceRemovedRows |> List.rev |> TetrisGrid

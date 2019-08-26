@@ -24,32 +24,28 @@ type Tetromino =
     | J of ColoredTetrominoShape
     | L of ColoredTetrominoShape
 
-type TetrominoPosition = private TetrominoPositionCoordinates of Coordinates with
-    static member (+) (first: TetrominoBlock, second: TetrominoPosition) =
-        let getBlockPlacementCords (TetrominoBlock cords) = cords
-        let getTetrominoPositionCords (TetrominoPositionCoordinates cords) = cords
-        (getBlockPlacementCords first) + (getTetrominoPositionCords second) |> TetrominoBlock
+type TetrominoPosition = private TetrominoPositionCoordinates of Coordinates
 
 type TetrominoWithPosition = {
     Position: TetrominoPosition;
     Tetromino: Tetromino;
 }
 
-type TetrominoVelocity = private TetrominoMovement of Coordinates with
-    static member (+) (first: TetrominoWithPosition, second: TetrominoVelocity) =
-        let getTetrominoMovementCords (TetrominoMovement cords) = cords
-        let getTetrominoPositionCords (TetrominoPositionCoordinates cords) = cords
-        let newPosition = (getTetrominoPositionCords first.Position) + (getTetrominoMovementCords second) |> TetrominoPositionCoordinates
-        {first with Position = newPosition}
+type TetrominoVelocity = private TetrominoMovement of Coordinates
 
 let private randomGenerator = System.Random()
+
+let createTetrominoVelocity x y = createCoordinates x y |> TetrominoMovement
         
-let private createBlockPlacementCoordinates x y =
-    createCoordinatesWithIntegers x y |> TetrominoBlock
+let private createBlockPlacementCoordinates x y = createCoordinatesWithIntegers x y |> TetrominoBlock
     
 let private getBlockPlacementCords (TetrominoBlock cords) = cords
 
 let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
+    
+let getTetrominoPositionCords (TetrominoPositionCoordinates cords) = cords
+    
+let getTetrominoMovementCords (TetrominoMovement cords) = cords
 
 let private createShapeFromVisualArray (visualArray: int list list) =
     let blockPlacementForCell value x y = match (value) with
@@ -64,10 +60,18 @@ let private createShapeFromVisualArray (visualArray: int list list) =
                 |> convertOption2dListToFlatListWithoutNone
                 |> TetrominoShape
 
-let private createColoredShape color shape =
-    { Shape = shape; Color = color }
+let private createColoredShape color shape = { Shape = shape; Color = color }
+    
+let private translateTetrominoBlockByPosition tetrominoBlock position = 
+        (getBlockPlacementCords tetrominoBlock) + (getTetrominoPositionCords position) |> TetrominoBlock
     
 let private createShapeFromVisualArrayWithColor color = createShapeFromVisualArray >> createColoredShape color
+
+let moveTetrominoByTetrominoVelocity tetrominoWithPosition velocity = 
+    let newPosition = (getTetrominoPositionCords tetrominoWithPosition.Position) + (getTetrominoMovementCords velocity) |> TetrominoPositionCoordinates
+    {tetrominoWithPosition with Position = newPosition}
+
+let moveTetrominoByVelocity tetrominoWithPosition dX dY = moveTetrominoByTetrominoVelocity tetrominoWithPosition (createTetrominoVelocity dX dY)
 
 let createITetromino =
     let shape = [[0; 0; 0; 0];
@@ -134,7 +138,7 @@ let private apply f tetromino=
 let convertTetrominoWithPositionToTetrominoBlockList (tetromino: TetrominoWithPosition) =
     let translateColoredShapeToTetrominoBlocksOnGrid (position: TetrominoPosition) (coloredShape: ColoredTetrominoShape)  =
         let tetrominoBlocks = coloredShape.Shape |> getBlocksFromTetrominoShape
-        tetrominoBlocks |> List.map(fun block -> block + position)
+        tetrominoBlocks |> List.map(fun block -> translateTetrominoBlockByPosition block position)
     
     let translateTetrominoToTetrominoBlocksOnGrid tetromino (position: TetrominoPosition) =
         let translateColoredShapeToTetrominoBlocksOnGridWithPosition = translateColoredShapeToTetrominoBlocksOnGrid position
@@ -152,11 +156,7 @@ let private createCellForCoordinates color translatedBlocks coordinates =
         | true -> CellWithBlock color
         | false -> CellWithoutBlock
   
-let createTetrominoVelocity x y =
-    createCoordinates x y |> TetrominoMovement
-
-let createTetrominoPositionCoordinates x y =
-    createCoordinates x y |> TetrominoPositionCoordinates
+let createTetrominoPositionCoordinates x y = createCoordinates x y |> TetrominoPositionCoordinates
    
 let tetrominoOverlaps tetrisGrid tetromino =
     let translatedBlocks = convertTetrominoWithPositionToTetrominoBlockList tetromino

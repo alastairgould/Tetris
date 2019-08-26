@@ -15,8 +15,6 @@ let private getXValue (XCoordinate value) = value
     
 let private toTuple coordinates = (getXValue coordinates.X), (getYValue coordinates.Y)
 
-let private toList coordinates = [(getXValue coordinates.X); (getYValue coordinates.Y)]
-
 type YCoordinate with
     static member (+) (first: YCoordinate, second: YCoordinate) =
             (getYValue first) + (getYValue second) |> YCoordinate
@@ -35,7 +33,7 @@ let createCoordinatesWithIntegers x y = createCoordinates (sbyte x) (sbyte y)
 
 let isCoordinatesOutOfBounds coordinates =
     let x, y = toTuple coordinates
-    x < 0y || x > Grid.width || y < 0y || y > Grid.height
+    x < 0y || x > Grid.width - 1y || y < 0y || y > Grid.height - 1y
 
 let findBoundingGridSizeForListOfCoords coords =
     let findHighest currentHighest nextValue = if nextValue > currentHighest
