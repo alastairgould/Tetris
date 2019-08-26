@@ -19,9 +19,9 @@ let private getBlockPlacementCoordinates (TetrominoBlock cords) = cords
 
 let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
    
-let createShapeFromBlockPlacementCoordinates = List.map(TetrominoBlock) >> TetrominoShape
+let private createShapeFromBlockPlacementCoordinates = List.map(TetrominoBlock) >> TetrominoShape
 
-let getBlockPlacementCoordinatesFromShape = getBlocksFromTetrominoShape >> List.map getBlockPlacementCoordinates
+let private getBlockPlacementCoordinatesFromShape = getBlocksFromTetrominoShape >> List.map getBlockPlacementCoordinates
     
 let private createShapeFromVisualArray (visualArray: int list list) =
     let blockPlacementForCell value x y = match (value) with
