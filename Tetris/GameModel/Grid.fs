@@ -2,8 +2,7 @@ module Tetris.GameModel.Grid
 
 open Tetris.GameModel.BlockColor
 
-let height = 20y
-let width = 10y
+let height, width = 20y, 10y
 
 type TetrisGridCell =
     | CellWithBlock of BlockColor
