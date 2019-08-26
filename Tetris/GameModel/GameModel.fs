@@ -25,13 +25,13 @@ let private  getGameModelFromStepState stepState =
         | ReactedToInput state -> state
         | NotReactedToInput state -> state
 
-let private newTetromino() = { Position = createTetrominoPositionCoordinates 3y 20y; Tetromino = createTetromino() }
+let private newTetromino tetrominoGenerator = { Position = createTetrominoPositionCoordinates 3y 20y; Tetromino = tetrominoGenerator() }
 
 let renderableGrid stepState =
     let gameModel = stepState |> getGameModelFromStepState 
     addTetrominoToGrid gameModel.Grid gameModel.Tetromino
 
-let createInitialGameModel = NotReactedToInput { Tetromino = newTetromino(); Grid = createEmptyGrid }
+let createInitialGameModel tetrominoGenerator = NotReactedToInput { Tetromino = newTetromino tetrominoGenerator; Grid = createEmptyGrid }
     
 let bind f stepState =
     match stepState with
@@ -69,14 +69,14 @@ let reactToInput (stepState: CurrentStepState) (input: InputToGameModel) =
                                     | RotateAntiClockwise -> handleInputRotateAntiClockwise gameModel
     bind handleInput stepState
     
-let private placeTetromino gameModel =
-    let placedGrid = { Grid = (addTetrominoToGrid gameModel.Grid gameModel.Tetromino); Tetromino = newTetromino()}
+let private placeTetromino gameModel tetrominoGenerator =
+    let placedGrid = { Grid = (addTetrominoToGrid gameModel.Grid gameModel.Tetromino); Tetromino = (newTetromino tetrominoGenerator)}
     { placedGrid with Grid = removeFilledRows placedGrid.Grid } 
 
-let stepWorld (stepState: CurrentStepState) =
+let stepWorld (stepState: CurrentStepState) tetrominoGenerator =
     let gameModel = stepState |> getGameModelFromStepState
     let newGameModel =  { gameModel with Tetromino = moveTetrominoByVelocity gameModel.Tetromino 0y -1y }
     let outcome = checkForPlacement newGameModel.Grid newGameModel.Tetromino 
     match outcome with
-        | PlaceTetromino -> NotReactedToInput (placeTetromino gameModel)
+        | PlaceTetromino -> NotReactedToInput (placeTetromino gameModel tetrominoGenerator)
         | DontPlaceTetromino -> NotReactedToInput newGameModel 
