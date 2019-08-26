@@ -19,6 +19,8 @@ let private getBlockPlacementCoordinates (TetrominoBlock cords) = cords
 
 let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
    
+let createShapeFromBlockPlacementCoordinates = List.map(TetrominoBlock) >> TetrominoShape
+
 let getBlockPlacementCoordinatesFromShape = getBlocksFromTetrominoShape >> List.map getBlockPlacementCoordinates
     
 let private createShapeFromVisualArray (visualArray: int list list) =
@@ -39,8 +41,7 @@ let private createColoredShape color shape = { Shape = shape; Color = color }
 let private translateShapeToGridCoordinates gridCoordinate shape =
     shape |> getBlockPlacementCoordinatesFromShape
           |> List.map(fun blockCoordinate -> blockCoordinate + gridCoordinate)
-          |> List.map(TetrominoBlock)
-          |> TetrominoShape
+          |> createShapeFromBlockPlacementCoordinates
 
 let translateColoredShapeToGridCoordinates gridCoordinate coloredShape =
     { coloredShape with Shape = translateShapeToGridCoordinates gridCoordinate coloredShape.Shape }
@@ -97,8 +98,7 @@ let private rotateShapeClockwise tetrominoShape =
     let highestBound = findBoundingGridSizeForListOfCoords blockCoords
     
     blockCoords |> List.map(fun blockCords -> rotateCoordinatesClockwise blockCords highestBound)
-                |> List.map(fun rotatedCords -> TetrominoBlock rotatedCords)
-                |> TetrominoShape
+                |> createShapeFromBlockPlacementCoordinates
                 
 let rotateColoredShapeClockwise (coloredTetrominoShape: ColoredTetrominoShape) =
     { coloredTetrominoShape with Shape = rotateShapeClockwise coloredTetrominoShape.Shape}
