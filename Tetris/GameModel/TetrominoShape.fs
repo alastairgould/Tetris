@@ -18,6 +18,8 @@ let private createBlockPlacementCoordinates x y = createCoordinatesWithIntegers 
 let private getBlockPlacementCoordinates (TetrominoBlock cords) = cords
 
 let private getBlocksFromTetrominoShape (TetrominoShape shape) = shape
+
+let private getShapeFromColoredShape coloredShape = coloredShape.Shape
    
 let private createShapeFromBlockPlacementCoordinates = List.map(TetrominoBlock) >> TetrominoShape
 
@@ -38,10 +40,9 @@ let private createShapeFromVisualArray (visualArray: int list list) =
 
 let private createColoredShape color shape = { Shape = shape; Color = color }
     
-let private translateShapeToGridCoordinates gridCoordinate shape =
-    shape |> getBlockPlacementCoordinatesFromShape
-          |> List.map(fun blockCoordinate -> blockCoordinate + gridCoordinate)
-          |> createShapeFromBlockPlacementCoordinates
+let private translateShapeToGridCoordinates gridCoordinate = getBlockPlacementCoordinatesFromShape
+                                                             >> List.map(fun blockCoordinate -> blockCoordinate + gridCoordinate)
+                                                             >> createShapeFromBlockPlacementCoordinates
 
 let translateColoredShapeToGridCoordinates gridCoordinate coloredShape =
     { coloredShape with Shape = translateShapeToGridCoordinates gridCoordinate coloredShape.Shape }
@@ -103,7 +104,6 @@ let private rotateShapeClockwise tetrominoShape =
 let rotateColoredShapeClockwise (coloredTetrominoShape: ColoredTetrominoShape) =
     { coloredTetrominoShape with Shape = rotateShapeClockwise coloredTetrominoShape.Shape}
 
-let isShapeOutsideOfBounds coloredShape =
-    coloredShape.Shape |> getBlockPlacementCoordinatesFromShape
-                       |> List.map isCoordinatesOutOfBounds
-                       |> List.contains true
+let isShapeOutsideOfBounds = getShapeFromColoredShape >> getBlockPlacementCoordinatesFromShape
+                                                      >> List.map isCoordinatesOutOfBounds
+                                                      >> List.contains true
