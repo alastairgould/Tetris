@@ -35,12 +35,11 @@ let private createShapeFromVisualArray (visualArray: int list list) =
 let private createColoredShape color shape = { Shape = shape; Color = color }
     
 let private translateShapeToGridCoordinates gridCoordinate shape =
-    shape
-        |> getBlocksFromTetrominoShape
-        |> List.map(getBlockPlacementCoordinates)
-        |> List.map(fun blockCoordinate -> blockCoordinate + gridCoordinate)
-        |> List.map(TetrominoBlock)
-        |> TetrominoShape
+    shape |> getBlocksFromTetrominoShape
+          |> List.map(getBlockPlacementCoordinates)
+          |> List.map(fun blockCoordinate -> blockCoordinate + gridCoordinate)
+          |> List.map(TetrominoBlock)
+          |> TetrominoShape
 
 let translateColoredShapeToGridCoordinates gridCoordinate coloredShape =
     { coloredShape with Shape = translateShapeToGridCoordinates gridCoordinate coloredShape.Shape }
@@ -65,10 +64,9 @@ let addColoredShapeToGrid tetrisGrid coloredShape =
     
     let tetrisRowWithTetromino yIndex = getRowList >> rowWithTetromino yIndex >> TetrisGridRow
     
-    tetrisGrid
-        |> getGridArray
-        |> List.mapi(tetrisRowWithTetromino)
-        |> TetrisGrid
+    tetrisGrid |> getGridArray
+               |> List.mapi(tetrisRowWithTetromino)
+               |> TetrisGrid
 
 let private doesShapeOverlapWithBlocksOnGrid tetrisGrid shape = 
     let overlappingBlock (currentCell: TetrisGridCell) translatedBlocks coordinates =
@@ -83,11 +81,10 @@ let private doesShapeOverlapWithBlocksOnGrid tetrisGrid shape =
     
     let tetrisRowWithTetromino yIndex = getRowList >> rowWithTetromino yIndex
     
-    tetrisGrid
-            |> getGridArray
-            |> List.mapi(tetrisRowWithTetromino)
-            |> List.concat
-            |> List.contains(true)
+    tetrisGrid |> getGridArray
+               |> List.mapi(tetrisRowWithTetromino)
+               |> List.concat
+               |> List.contains(true)
      
 let doesColoredShapeOverlapWithBlocksOnGrid tetrisGrid coloredShape =
     doesShapeOverlapWithBlocksOnGrid tetrisGrid coloredShape.Shape
