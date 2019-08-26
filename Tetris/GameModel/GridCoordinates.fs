@@ -1,45 +1,43 @@
 module Tetris.GameModel.GridCoordinates
 
-type YCoordinate = private YCoordinate of sbyte with
-    static member (+) (first: YCoordinate, second: YCoordinate) =
-        let getValue (YCoordinate value) = value
-        (getValue first) + (getValue second) |> YCoordinate
+type YCoordinate = private YCoordinate of sbyte
     
-type XCoordinate = private XCoordinate of sbyte with
-    static member (+) (first: XCoordinate, second: XCoordinate) =
-        let getValue (XCoordinate value) = value
-        (getValue first) + (getValue second) |> XCoordinate
+type XCoordinate = private XCoordinate of sbyte 
 
 type Coordinates = private {
     X: XCoordinate
     Y: YCoordinate
-} with
+} 
+
+let private getYValue(YCoordinate value) = value
+
+let private getXValue (XCoordinate value) = value
+    
+let private toTuple coordinates = (getXValue coordinates.X), (getYValue coordinates.Y)
+
+let private toList coordinates = [(getXValue coordinates.X); (getYValue coordinates.Y)]
+
+type YCoordinate with
+    static member (+) (first: YCoordinate, second: YCoordinate) =
+            (getYValue first) + (getYValue second) |> YCoordinate
+
+type XCoordinate with
+    static member (+) (first: XCoordinate, second: XCoordinate) =
+            (getXValue first) + (getXValue second) |> XCoordinate 
+
+type Coordinates with
     static member (+) (first: Coordinates, second: Coordinates) =
         { X = first.X + second.X; Y = first.Y + second.Y }
-        
-let createCoordinates x y =
-    { X = XCoordinate x; Y = YCoordinate y }
 
-let createCoordinatesWithIntegers (x: int32) (y: int32) = createCoordinates (sbyte x) (sbyte y)
+let createCoordinates x y = { X = XCoordinate x; Y = YCoordinate y }
+
+let createCoordinatesWithIntegers x y = createCoordinates (sbyte x) (sbyte y)
 
 let isCoordinatesOutOfBounds coordinates =
-    let getYValue (YCoordinate value) = value
-    let getXValue (XCoordinate value) = value
-
-    let x = coordinates.X |> getXValue
-    let y = coordinates.Y |> getYValue
-    
-    if x < 0y || x > 9y then
-        true
-    elif y < 0y || y > 19y then
-        true
-    else
-        false
+    let x, y = toTuple coordinates
+    x < 0y || x >  Grid.width || y < 0y || y > Grid.height
 
 let findBoundingGridSizeForListOfCoords coords =
-    let getYValue (YCoordinate value) = value
-    let getXValue (XCoordinate value) = value
-    
     let findHighest currentHighest nextValue = if nextValue > currentHighest
                                                 then nextValue
                                                 else currentHighest 
@@ -51,11 +49,7 @@ let findBoundingGridSizeForListOfCoords coords =
     highestBound + 1y
         
 let rotateCoordinatesClockwise coordinates boundingGridSize =
-    let getXValue (XCoordinate value) = value
-    let getYValue (YCoordinate value) = value
-   
-    let oldX = getXValue coordinates.X 
-    let oldY = getYValue coordinates.Y
+    let oldX, oldY = toTuple coordinates
     
     let newX = oldY
     let newY = 1y - (oldX - (boundingGridSize - 2y))

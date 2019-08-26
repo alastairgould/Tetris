@@ -2,8 +2,8 @@ module Tetris.GameModel.Grid
 
 open Tetris.GameModel.BlockColor
 
-let private height = 20
-let private width = 10
+let height = 20y
+let width = 10y
 
 type TetrisGridCell =
     | CellWithBlock of BlockColor
@@ -27,10 +27,10 @@ let private isRowFull row =
     emptyCells.Length <> 0
 
 let private createEmptyRow =
-    TetrisGridRow [for x in 1 .. width -> CellWithoutBlock]
+    TetrisGridRow [for x in 1y .. width -> CellWithoutBlock]
 
 let createEmptyGrid =
-    TetrisGrid [for y in 1 .. height -> createEmptyRow]
+    TetrisGrid [for y in 1y .. height -> createEmptyRow]
 
 let removeFilledRows tetrisGrid =
     let tetrisGridList = tetrisGrid |> getGridArray
